@@ -18,20 +18,13 @@ class Authentication:
         Args:
             config_file (str): Path to the configuration YAML file.
         """
-        # Use the following for a yaml file
-        #with open(config_file) as file:
-        #    self.config = yaml.load(file, Loader=SafeLoader)
 
         # Handle secrets acc. streamlit's Cloud secrets
         raw_yaml = st.secrets["auth"]["credentials"]
         self.config = yaml.safe_load(raw_yaml)
         
-        # Testing logic
-        # file = 'secrets.toml'
-        # self.config = toml.load(file)
 
         self.authenticator = stauth.Authenticate(
-            # credentials=yaml.safe_load(self.config['auth']['credentials'])
             credentials=self.config
         )
 
