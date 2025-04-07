@@ -1,6 +1,6 @@
 # Taco AP Review
 
-Taco AP Review is an interactive study tool designed to help students prepare for AP History exams. It offers a user-friendly interface with options for both **text** and **speech** inputs, allowing users to practice writing, review course content, and test their knowledge with multiple-choice questions. The system is customizable, allowing users to choose from various AP History courses, interact with different AI models, and practice different types of questions.
+Taco AP Review is an interactive study tool designed to help students prepare for AP exams. It offers a user-friendly interface with options for both **text** and **speech** inputs, allowing users to practice writing, review course content, and test their knowledge with multiple-choice questions. The system is customizable, allowing users to choose from various AP History courses, interact with different AI models, and practice different types of questions.
 
 ## Features
 
@@ -11,22 +11,12 @@ Taco AP Review is an interactive study tool designed to help students prepare fo
 - **Real-Time Feedback**: Receive automatic AI feedback on writing and content review, based on official AP guidelines and exam descriptions.
 - **Course-Specific System Prompts**: System prompts dynamically adjust based on the selected course to help guide students’ study sessions effectively.
 
-## Usage
-
-Once the app is running, you can follow these steps to start studying:
-
-1. **Choose Input Modality**: Select whether you want to interact with Taco AP Review through text (`TacoText`) or speech (`TacoTalk`).
-2. **Select a Course**: Pick the AP History course you want to study (e.g., AP World History, AP US History, AP Human Geography).
-3. **Pick an AI Model**: Choose one of the AI models that best fits your study preferences—whether you need quick responses, high-quality writing, or deep knowledge of the material.
-4. **Choose a Prompt**: Select one of the pre-configured study prompts (e.g., writing practice, MCQ questions, content review) to begin your practice session.
-5. **Interact with Taco**: Start engaging with Taco through your chosen modality, receiving feedback and learning materials tailored to your needs.
-
 ## How It Works
 
 The app leverages **Streamlit** to provide a user-friendly interface for interacting with AI models, using the following workflow:
 
 1. **Vector Store**: Each AP course is linked to a **vector store** containing relevant course materials and study prompts.
-2. **AI Models**: Taco AP Review uses different AI models (from OpenAI or other sources) to provide tailored responses based on the course selected, user input, and study focus.
+2. **AI Models**: Taco AP Review uses different AI models to provide tailored responses based on the course selected, user input, and study focus.
 3. **System Prompts**: The app adjusts system prompts dynamically based on the selected course, ensuring that the AI responses are aligned with the AP exam structure and guidelines.
 4. **Study Session Flow**: Depending on the user’s selections, Taco will guide them through various study modes—writing practice, MCQs, content review—while providing helpful feedback and suggestions.
 

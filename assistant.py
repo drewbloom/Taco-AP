@@ -18,13 +18,13 @@ class Assistant:
         
         # Offer UI dropdown for selecting a model and set model based on user selection
         self.model = "4o-mini" # can set model needed - will set default and allow user to pick others
-        self.models = {"Instant Taco (Fastest)": "4o-mini", "Taco Supreme (Best Writing)": "4o", "Street Taco (Can Think)": "o3-mini"}
+        self.models = {"Instant Taco (Fastest)": "gpt-4o-mini", "Taco Supreme (Best Writing)": "gpt-4o", "Street Taco (Can Think)": "o3-mini"}
         st.session_state.model_selected = st.session_state.get('model_selected', None)
 
         self.vector_stores = {
             "AP World History": "vs_lu6EGQwhpKqUAyOXQrZammXo",
-            "AP Human Geography": "",
-            "AP US History": ""
+            "AP Human Geography": "vs_67f3071ccea88191bcfbb09a0ed82ace",
+            "AP US History": "vs_67f30733f5cc8191be28a8aaec7c9781"
                               }
         st.session_state.vector_store_selected = st.session_state.get('vector_store_selected', None)
         # Add vs files to session state so they can be retrieved when vs selected
@@ -83,29 +83,154 @@ You may alter your instructions to fit student study requests, as long as you do
 
         # Host a series of prompts that help students review for each course
         self.prompts = {
-            "Writing Practice": "Help the user practice their AP writing skills. You will lead the conversation and facilitate the learning by asking the student what they'd like to practice, then allowing the session to flow from there. Use your course and exam description to locate the main writing tasks and offer the student choices for which writing sections to practice. For example, AP World History has short-answer questions, document-based questions, and long-essay questions. By asking the user what they would like to focus on, you can help them by retrieving the writing requirements and scoring guidelines for that writing task. If the user asks for more general help, e.g. thesis writing, providing evidence, how much evidence to use, you can combine your tools along with your knowledge of the courses to help them. You should always rely on the course materials you have been given to guide students on writing. Do not rely on your knowledge of other kinds of writing to inform students, as AP courses often have their own, strict definitions of what writing should look like and how it should be scored. When in doubt, communicate that you are unsure and direct the student to their teacher. When possible, however, try to give the student feedback and support that will help them with their writing generally, even if those changes may not directly pertain to scoring guidelines that you have found for the course. Take a deep breath and begin by asking the student what kind of writing they'd like to work on with you.",
+            "Writing Practice": """Objective: Assist students in practicing AP writing tasks (short-answer questions, document-based questions, long-essay questions) by guiding them through a structured learning process that mirrors the AP exam's rigor and format. The AI should provide feedback, challenge the student, and help them improve their writing skills based on AP guidelines and content.
+
+Instructions for AI:
+
+Initiate the Session:
+
+AI: Checks the system message to determine which AP course is being studied. Then, ask the student which type of writing task they would like to focus on or if there are specific skills they'd like to work on.
+
+Example: "Okay, so we're practicing some writing for AP U.S. History. Are you looking to practice short-answer questions, document-based questions, or long-essays today? Or do you have specific skills you want to work on, like thesis writing or contextualization?"
+
+Get Course Content & Skills Descriptions:
+
+User: Responds with focus areas or asks for general writing help.
+Example: "I really need help with contextualization. Mine suck."
+
+AI: Retrieves the relevant writing requirements and scoring guidelines for the student’s requested task. AI should also be ready to give general writing tips or direct the student to more specific feedback.
+Example: *searches course description and exam documents for contextualization, long-essay question, document-based question*
+
+Present Writing Task and Prompt:
+
+AI: Present a sample writing task (e.g., a document-based question or essay prompt) designed to practice skills and elicit understandings through writing.
+Example (e.g., for AP U.S. History):
+"Let's try writing a contextualization for this:
+**Prompt:** 'Analyze the extent to which the American Revolution marked a turning point in American political development.'"
+
+User: The student should try to write a response so you can help them practice. You may help with questions or starter sentences if they ask follow-ups.
+Example: User: "I don't even know where to begin..."
+AI: "A great contextualization starts with a time period. In our history essays, we typically want to contextualize about 50 years of history up to the point of the prompt. So - when does this prompt start?"
+User: "1776?"
+AI: "That's right - so our contextualization would start as early as 1700. We want to discuss the things that explain the significance of our prompt - are there any themes you notice from the course?"
+User: "Politics"
+AI: "What could you tell me about politics in the colonies between 1700 and 1776, then?"
+
+User and Assistant continue this interaction with the assistant eventually leading the user to discuss the three or more examples for contextualization, as stated in the course exam and description.
+
+Provide Feedback:
+
+User: Submits a draft or outlines their response.
+
+AI: Provide constructive feedback. Offer guidance based on the requirements in the course descriptiong documents. You can also provide feedback on aspects like thesis clarity, evidence use, organization, and argument development. Avoid simply giving answers—encourage the student to think critically about their work.
+
+Example: "Okay, you've got three solid examples of political developments in the colonies that led to revolution. You also wrote a thesis. Could you clarify your thesis a bit more? Perhaps focus on specifying how the Revolution’s impact on governance was different from previous periods. Remember, you'll have to write a thesis that's detailed enough to give you a chance to write about a lot of examples. That's even more true in your DBQ, where you'll need to tie together a wide range of historical documents into a single argument."
+
+If the student’s response doesn’t fully meet the requirements or could be stronger, offer specific advice on improvement.
+
+Example: "Your thesis is a bit broad right now. Try to narrow it down by addressing a specific political change, like how it altered relationships between states or the federal government."
+
+Challenge and Prompt Further Development:
+
+AI: If the student is struggling, ask them questions to guide deeper thinking, such as:
+"Can you think of any examples from the course that might support your argument here?"
+Or, if they're making progress, challenge them to consider more advanced elements of their response:
+"You’ve made a strong case, but what about counterarguments? How might someone disagree with your point of view, and how could you address that?"
+
+Repeat the Process:
+
+AI: Continue to work through the writing task with the student, encouraging them to refine their writing, develop their argument, and incorporate feedback. Provide continuous, real-time feedback on each part of the writing process.
+
+Example: "You’ve made excellent revisions to your thesis. Now, let’s make sure your evidence flows logically—can you add a sentence that connects your second piece of evidence to the first?"
+
+Conclude the Session:
+
+AI: Once the student feels confident in their writing, ask if they'd like to review other tasks or areas of writing. Suggest additional resources or strategies to improve further.
+
+Example: "You’ve done great work today! Would you like to practice a different writing task, or focus on improving a particular part of your response, like evidence analysis or concluding statements?"
+
+General Note for AI:
+
+Throughout the interaction, ensure that feedback is specific and constructive, based on AP course materials. Always use the language and guidelines of the specific AP course in your feedback.
+
+Avoid giving the student a direct, complete answer; the goal is to encourage the student’s own learning and development through thoughtful questioning and feedback.
+""",
             
             
-            "Multiple Choice Practice": """Help the user practice their AP multiple-choice skills.
-You will guide the conversation and facilitate the learning by asking the student what kind of AP multiple-choice practice they would like to focus on. Start by offering a brief explanation of the types of content they might be practicing, such as historical quotes, excerpts from historians, or images related to the course material. You should use the AP course and exam description to locate the main topics and concepts relevant to the multiple-choice questions.
+            "Multiple Choice": """Objective: Assist students in practicing AP multiple-choice questions by guiding them through a structured learning process that mirrors the AP exam's rigor and format.
 
-For example, AP World History might involve topics like significant historical events, key figures, or major thematic trends across time periods. Based on what the student wants to focus on, you can offer them choices that are consistent with the course content and relevant to the exam structure.
+Instructions for AI:
 
-Once the student has selected an area to focus on, you will create multiple-choice questions by:
+Initiate the Session:
 
-Using the course and exam description to guide question difficulty and topic selection.
+AI: Checks the system message to determine which AP course is being studied, then asks the student if there are focuses for this study session.
+Example: "Alright, let's practice some multiple choice for AP Human Geography -- are there particular topics or themes you'd like to practice?"
 
-Ensuring the questions are structured to match the difficulty and format of sample MCQs found in the course description documents.
+Get Course Content:
 
-Incorporating content such as historical quotes, historian excerpts, or relevant images/cartoons that help contextualize the material, whenever possible.
+User: Responds with focus areas, or asks for general review
 
-Retrieving historical quotes or images through internet searches (if necessary), while ensuring the content is appropriate, safe, and educational for high school students. Be sure to make clear which content comes from the internet, and do not use anything unsafe or inappropriate.
+AI: Retrieves the exam and course description to examine the content related to the user request and familiarize itself with the course
 
-Your goal is to offer students practice that closely resembles what they will encounter on the exam. Always provide brief feedback after each question, explaining why the correct answer is right and why the distractors are not. This will help students improve their reasoning skills and understanding of the material.
+Present Stimulus and Question:
 
-If the student requests general guidance, such as how to approach answering multiple-choice questions or tips for studying, use the course materials and your knowledge of the AP exam to guide them. Be clear that you are using the AP guidelines, and direct them to their teacher if the question goes beyond what you can help with.
+AI: Provide a stimulus (historical quote, excerpt, or image) followed by a multiple-choice question designed to challenge the student's understanding.
 
-Take a deep breath and begin by asking the student what kind of multiple-choice practice they’d like to focus on!""",
+Example (e.g. for AP World History): "Stimulus: "In the early 18th century, the Ottoman Empire faced significant administrative challenges. Provincial governors, known as beys, exercised considerable autonomy, often leading to inconsistent tax collection and military service. To address these issues, the central government issued a decree aiming to standardize taxation and military conscription across all provinces, reinforcing the sultan's authority."
+
+Question: "Which of the following best describes the primary objective of the decree mentioned above?"
+
+A) To decentralize governance by granting more power to provincial governors.
+
+B) To standardize administrative practices across provinces to strengthen central authority.
+
+C) To promote cultural diversity by recognizing multiple official languages.
+
+D) To reduce the military's influence in provincial governance.
+
+Student Response:
+
+Student: Selects an answer choice.
+
+Example: "C."
+
+Provide Feedback:
+
+AI: Offer immediate feedback on the student's choice, congratulating them if they are correct. If the student's answer is wrong, the assistant explains why the first answer they picked was not correct. The student can be prompted for another guess or can ask for an explanation of the correct answer.
+
+Example: Assistant: "C is incorrect here. If we look at the stimulus, we don't see discussion of ethnic groups or languages, which would be good ways to spot cultural diversity. Is there another option that stands out to you, or would you like me to explain the correct answer?"
+
+User: "I'm confused by this one, could you explain the correct answer?"
+
+Assistant: "Sure. The correct answer is B. The Ottoman Empire's decree aimed to standardize administrative practices across provinces, thereby reinforcing central authority. Options A, C, and D are incorrect because the stimulus does not mention or pertain to those particular understandings."
+
+Present Next Question:
+
+AI: Introduce the next question, maintaining the sequence and difficulty appropriate to the AP exam.​
+
+Example (e.g. for AP Human Geography):
+
+Stimulus: "The intricate network of borders in regions like the Middle East has often led to disputes over territory, resources, and governance. These boundaries, drawn during the colonial era, frequently disregard the existing ethnic, religious, and cultural landscapes, resulting in ongoing conflicts and challenges to sovereignty."
+
+Question: "Which type of boundary is exemplified by the borders in the Middle East, often leading to disputes over territory and resources?"
+
+A) "Antecedent Boundary"
+
+B) "Subsequent Boundary"
+
+C) "Superimposed Boundary"
+
+D) "Relic Boundary"
+
+Repeat Process:
+
+Continue presenting questions one at a time, providing feedback after each response, until the set of practice questions is complete.
+
+Conclude the Session:
+
+AI: The student may ask for tips to improve. You may suggest test-taking strategies for multiple choice. They may also alter the goal of the practice to writing or content review, at which point you should be ready to begin with those practices instead. You may use your internet search tool to offer additional resources or suggest further practice if necessary.
+
+Note: Throughout the interaction, the AI should ensure that all content is appropriate, safe, and educational for high school students. Any external content retrieved should be clearly cited, and the AI should avoid using unsafe or inappropriate materials.""",
             
             
             "Content Review": """Help the user review and study key concepts, topics, or units in the AP History course.
@@ -160,10 +285,10 @@ Take a deep breath, ask the student what they’d like to review, and help them 
         st.title(":taco:Taco:taco: AP Review")
         st.sidebar.title(":material/mic: TacoTalk or TacoText :material/chat:")
         st.write("## Writing, Test Prep, Quizzes - Taco can help!")
-        st.write("*Begin by choosing TacoTalk or TacoText and picking your course on the left*")
+        st.write("Begin by choosing Talk or Text and picking your course on the left")
 
         new_modality = st.sidebar.selectbox(
-            "Input Modality", ("Talk", "Text"), index=None, placeholder="How you'll talk to Taco", label_visibility="collapsed", key="modality"
+            label="Input Modality", options=["Talk", "Text"], index=None, placeholder="How you'll talk to Taco", label_visibility="collapsed", key="modality"
         )
         
         if new_modality != self.modality:
@@ -177,36 +302,58 @@ Take a deep breath, ask the student what they’d like to review, and help them 
         # AP Courses / Vector Stores
         upload_widget.title(':material/topic: Available Courses')
         vs_container = upload_widget.container()
-        vs_selected = vs_container.selectbox(label=':material/left_click: Choose your course', index=0, options=self.vector_stores)
+        vs_selected = vs_container.selectbox(label=':material/left_click: Choose your course', index=None, options=self.vector_stores)
         if vs_selected != st.session_state.vector_store_selected:
             with st.spinner("Updating the AI for your course..."):
-                st.session_state.vector_store_selected = vs_selected
+                st.session_state.vector_store_selected = self.vector_stores[vs_selected]
                 st.session_state.system_message_selected = self.system_messages.get(vs_selected, self.system_message)
-                st.success(f"AI Updated for your course: {st.session_state.vector_store_selected}")
+
+                # If no current messages, add the new system message. If current messages, swap old sys message for new one
+                if len(st.session_state.messages) < 1:
+                    st.session_state.messages.append({"role": "system", "content": st.session_state.system_message_selected})
+                else:
+                    st.session_state.messages[0] = {"role": "system", "content": st.session_state.system_message_selected}
+                st.success(f"AI Updated for your course: {vs_selected}")
 
         # Study Suggestions (Prompts)
         if st.session_state.vector_store_selected:
             upload_widget.title("Study Suggestions")
-            study_prompts = {
-                "Writing Practice": "Practice essay writing: Short Answer, DBQs, Long Essays",
-                "MCQ Practice": "Practice multiple-choice questions with real exam content",
-                "Content Review": "Dive deeper into key historical concepts and connections"
-            }
-            selected_prompt = upload_widget.radio("Choose a prompt", options=study_prompts)
+            
+            # Set up columns to hold buttons
+            col1, col2, col3 = upload_widget.columns(3)
 
-            # Displaying prompt descriptions on hover
-            with st.sidebar:
-                for prompt in study_prompts:
-                    if st.button(prompt):
-                        st.session_state.selected_prompt = prompt
-                        # Send the prompt to AI for completion, but don't display it
-                        self.handle_prompt_selection(prompt)        
+            with col1:
+                writing_practice = st.button(type="primary", label="Writing Practice", help="Practice writing for your course assessments")
+            with col2:
+                mcq_practice = st.button(type="primary", label="Multiple Choice", help="Practice multiple-choice questions based on AP course outlines")
+            with col3:
+                content_review = st.button(type="primary", label="Content Review", help="Dive deeper into key concepts and connections")
+
+            # Handle button callbacks to begin an interaction
+            if writing_practice:
+                st.session_state.selected_prompt = self.prompts.get('Writing Practice')
+                self.handle_prompt_button()
+
+            if content_review:
+                st.session_state.selected_prompt = self.prompts.get('Content Review')
+                self.handle_prompt_button()
+
+            if mcq_practice:
+                st.session_state.selected_prompt = self.prompts.get('Multiple Choice')
+                self.handle_prompt_button()        
         
         
         # Offer choice of AI Models
-        st.sidebar.title(":material/smart_toy: Customize Tacos as needed")
+        st.sidebar.title(":material/smart_toy: Customize :taco: as needed")
         model_selection = st.sidebar.selectbox(label='Pick an AI model', options=self.models, index=0, label_visibility='collapsed')
-        st.session_state.model_selection = model_selection
+        st.session_state.model_selected = self.models[model_selection]
+
+        print(model_selection) #debug
+        print(st.session_state.model_selected) #debug
+
+    def handle_prompt_button(self):
+        
+        self.handle_text_input(prompt_input=st.session_state.selected_prompt)
 
 
     def handle_input(self):
@@ -216,14 +363,19 @@ Take a deep breath, ask the student what they’d like to review, and help them 
         elif st.session_state["modality"] == "Talk":
             self.handle_speech_input()
 
-    def handle_text_input(self):
+    def handle_text_input(self, prompt_input=None):
         """Process text input from the user."""
-        text_input = st.chat_input("Type your message", disabled=(self.modality != "Text"))
-        if text_input and not self.new_message:
-            st.session_state.messages.append({"role": "user", "content": text_input})
-            self.new_message = True
-            with st.chat_message("user"):
-                st.markdown(text_input)
+        if prompt_input == None:
+            text_input = st.chat_input("Type your message", disabled=(self.modality != "Text"))
+            if text_input and not self.new_message:
+                st.session_state.messages.append({"role": "user", "content": text_input})
+                self.new_message = True
+                with st.chat_message("user"):
+                    st.markdown(text_input)
+        else:
+            if prompt_input and not self.new_message:
+                st.session_state.messages.append({"role": "user", "content": st.session_state.selected_prompt})
+                self.new_message = True
 
     def handle_speech_input(self):
         """Process speech input from the user."""
@@ -256,20 +408,17 @@ Take a deep breath, ask the student what they’d like to review, and help them 
 
                 # If stream is True, use the helper stream_handler()
                 self.stream = self.client.responses.create(
-                    model=self.model,
+                    model=st.session_state.model_selected,
                     input=st.session_state.messages,
                     stream=True,
                     tools=self.tools,
                     truncation="auto"
                 )
                 
-                
+
                 response = self.stream_handler()
                 final_response = st.write_stream(response)
                 
-                # Use a handler to yield text stream
-                for text in self.stream_handler():
-                   st.write_stream(text)
                 # Add final response to messages list
                 st.session_state.messages.append({"role": "assistant", "content": final_response})
 
@@ -401,9 +550,10 @@ Take a deep breath, ask the student what they’d like to review, and help them 
             # Dispense with any tool message prior to processing messages into chat flow
             if isinstance(message, dict):
                 if message["role"] not in ["system", "tool"]:
-                    with st.chat_message(message["role"]):
-                        st.markdown(message["content"])
-                # st.session_state["modality_change"] = False
+                    # Remove any scripted prompts by checking content against the prewritten prompts
+                    if message["content"] not in self.prompts.values():
+                        with st.chat_message(message["role"]):
+                            st.markdown(message["content"])
 
             # Check if the message is a ChatCompletion object (response from OpenAI API)
             elif isinstance(message, object):  # This will catch all messages, but we narrow down with attributes below

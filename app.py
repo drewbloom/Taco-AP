@@ -14,12 +14,13 @@ from assistant import Assistant
 # Add modular agents in addition to Graph API Agent: Teamwork API, NetDocuments API
 # Capture refresh tokens to use for future auth in stable state beyond sessions (yaml field?)
 
+# Test API Key retrieval
 # Load environment variables
-load_dotenv()
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+# load_dotenv()
+# OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 # Use streamlit secrets implementation
-# OPENAI_API_KEY = st.secrets["ai_api"]["api_key"]
+OPENAI_API_KEY = st.secrets["ai_api"]["api_key"]
 
 def main():
     # Initialize the Authentication class
