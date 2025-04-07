@@ -17,7 +17,7 @@ class Assistant:
         self.client = client # currently OpenAI client, but could pass a different client from app.py
         
         # Offer UI dropdown for selecting a model and set model based on user selection
-        self.model = "4o-mini" # can set model needed - will set default and allow user to pick others
+        self.model = "gpt-4o-mini" # can set model needed - will set default and allow user to pick others
         self.models = {"Instant Taco (Fastest)": "gpt-4o-mini", "Taco Supreme (Best Writing)": "gpt-4o", "Street Taco (Can Think)": "o3-mini"}
         st.session_state.model_selected = st.session_state.get('model_selected', None)
 
